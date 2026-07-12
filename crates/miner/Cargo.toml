@@ -14,7 +14,7 @@ serde.workspace = true
 thiserror.workspace = true
 tokio.workspace = true
 tracing.workspace = true
-blockchain-core.workspace = true
-consensus.workspace = true
-cryptography.workspace = true
-mempool.workspace = true
+blockchain-core = { path = "../blockchain-core" }
+consensus = { path = "../consensus" }
+cryptography = { path = "../cryptography" }
+mempool = { path = "../mempool" }

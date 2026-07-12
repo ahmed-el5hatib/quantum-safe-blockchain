@@ -14,4 +14,4 @@ serde.workspace = true
 thiserror.workspace = true
 rocksdb.workspace = true
 sled.workspace = true
-blockchain-core.workspace = true
+blockchain-core = { path = "../blockchain-core" }

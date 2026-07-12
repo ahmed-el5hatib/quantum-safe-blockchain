@@ -1,5 +1,8 @@
 //! libp2p networking layer.
-pub mod error;
-pub mod peer;
-pub mod protocol;
+//!
+//! Provides trait-based interfaces for P2P networking.
 pub mod discovery;
+pub mod error;
+pub mod protocol;
+pub mod traits;
+pub use error::NetworkResult;

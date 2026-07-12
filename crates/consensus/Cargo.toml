@@ -14,6 +14,6 @@ serde.workspace = true
 thiserror.workspace = true
 tokio.workspace = true
 tracing.workspace = true
-blockchain-core.workspace = true
-cryptography.workspace = true
-transaction.workspace = true
+blockchain-core = { path = "../blockchain-core" }
+cryptography = { path = "../cryptography" }
+transaction = { path = "../transaction" }

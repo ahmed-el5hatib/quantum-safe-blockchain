@@ -15,3 +15,4 @@ thiserror.workspace = true
 tracing.workspace = true
 prometheus.workspace = true
 axum.workspace = true
+blockchain-core = { path = "../blockchain-core" }

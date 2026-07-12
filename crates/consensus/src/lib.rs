@@ -1,5 +1,6 @@
 //! Consensus algorithms and traits.
+//!
+//! Provides the ConsensusEngine trait and future algorithm implementations.
 pub mod error;
 pub mod traits;
-pub mod pow;
-pub mod pos;
+pub use error::ConsensusResult;

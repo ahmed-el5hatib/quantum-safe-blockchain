@@ -14,3 +14,4 @@ serde.workspace = true
 thiserror.workspace = true
 tracing.workspace = true
 tracing-subscriber.workspace = true
+blockchain-core = { path = "../blockchain-core" }

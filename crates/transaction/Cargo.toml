@@ -15,5 +15,5 @@ thiserror.workspace = true
 zeroize.workspace = true
 hex.workspace = true
 blake3.workspace = true
-blockchain-core.workspace = true
-cryptography.workspace = true
+blockchain-core = { path = "../blockchain-core" }
+cryptography = { path = "../cryptography" }

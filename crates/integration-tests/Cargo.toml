@@ -9,5 +9,5 @@ repository.workspace = true
 [dependencies]
 tokio.workspace = true
 tracing.workspace = true
-blockchain-core.workspace = true
-node.workspace = true
+blockchain-core = { path = "../blockchain-core" }
+node = { path = "../node" }

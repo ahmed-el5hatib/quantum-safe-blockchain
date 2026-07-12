@@ -4,4 +4,3 @@ use qsb_node::prelude::*;
 async fn test_consensus_sanity() {
     // TODO: Implement consensus integration test
 }
-

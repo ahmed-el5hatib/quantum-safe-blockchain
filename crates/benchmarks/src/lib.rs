@@ -1,5 +1,8 @@
 //! Performance benchmarks.
-pub mod error;
-pub mod tps;
-pub mod latency;
+//!
+//! Provides trait-based interfaces for benchmarking.
 pub mod crypto;
+pub mod error;
+pub mod latency;
+pub mod tps;
+pub use error::BenchmarkResult;

@@ -12,5 +12,6 @@ path = "src/bin/single_node.rs"
 
 [dependencies]
 tokio.workspace = true
-node.workspace = true
-config.workspace = true
+node = { path = "../node" }
+config = { path = "../config" }
+anyhow.workspace = true

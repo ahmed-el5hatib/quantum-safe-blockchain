@@ -16,5 +16,5 @@ clap.workspace = true
 tokio.workspace = true
 tracing.workspace = true
 anyhow.workspace = true
-config.workspace = true
-node.workspace = true
+config = { path = "../config" }
+node = { path = "../node" }

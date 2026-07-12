@@ -16,5 +16,6 @@ tokio.workspace = true
 tracing.workspace = true
 jsonrpsee.workspace = true
 axum.workspace = true
-blockchain-core.workspace = true
-node.workspace = true
+http.workspace = true
+blockchain-core = { path = "../blockchain-core" }
+node = { path = "../node" }

@@ -4,4 +4,3 @@ use qsb_node::prelude::*;
 async fn test_network_sanity() {
     // TODO: Implement network integration test
 }
-

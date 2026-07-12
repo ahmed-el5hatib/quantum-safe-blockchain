@@ -13,4 +13,4 @@ path = "src/lib.rs"
 serde.workspace = true
 tokio.workspace = true
 tracing.workspace = true
-blockchain-core.workspace = true
+blockchain-core = { path = "../blockchain-core" }

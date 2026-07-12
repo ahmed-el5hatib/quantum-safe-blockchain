@@ -1,5 +1,6 @@
 //! Wallet functionality: key generation, signing, and verification.
+//!
+//! Provides trait-based interfaces for wallet management.
 pub mod error;
-pub mod keypair;
-pub mod signer;
-pub mod verifier;
+pub mod traits;
+pub use error::WalletResult;

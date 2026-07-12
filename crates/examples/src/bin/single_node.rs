@@ -6,4 +6,3 @@ async fn main() -> anyhow::Result<()> {
     tracing::info!(target: "qsb", "Starting QSB single node...");
     Ok(())
 }
-

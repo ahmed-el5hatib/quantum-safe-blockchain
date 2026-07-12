@@ -14,7 +14,7 @@ serde.workspace = true
 thiserror.workspace = true
 tokio.workspace = true
 criterion.workspace = true
-blockchain-core.workspace = true
-consensus.workspace = true
-networking.workspace = true
-cryptography.workspace = true
+blockchain-core = { path = "../blockchain-core" }
+consensus = { path = "../consensus" }
+networking = { path = "../networking" }
+cryptography = { path = "../cryptography" }

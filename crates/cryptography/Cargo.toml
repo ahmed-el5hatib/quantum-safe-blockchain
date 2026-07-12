@@ -21,3 +21,5 @@ ed25519-dalek.workspace = true
 p256.workspace = true
 rand.workspace = true
 base64.workspace = true
+subtle.workspace = true
+blockchain-core = { path = "../blockchain-core" }

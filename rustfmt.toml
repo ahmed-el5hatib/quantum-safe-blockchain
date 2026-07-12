@@ -6,5 +6,4 @@ reorder_imports = true
 reorder_modules = true
 newline_style = "Auto"
 remove_nested_parens = true
-condense_wildcard_suffixes = true
 

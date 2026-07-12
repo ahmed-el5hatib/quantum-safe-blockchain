@@ -1,4 +1,7 @@
 //! Node orchestration and lifecycle management.
+//!
+//! Coordinates all subsystems into a running node.
+pub mod config;
 pub mod error;
 pub mod service;
-pub mod config;
+pub use error::NodeResult;

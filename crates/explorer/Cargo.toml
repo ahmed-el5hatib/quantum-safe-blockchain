@@ -15,5 +15,5 @@ thiserror.workspace = true
 tokio.workspace = true
 tracing.workspace = true
 axum.workspace = true
-blockchain-core.workspace = true
-storage.workspace = true
+blockchain-core = { path = "../blockchain-core" }
+storage = { path = "../storage" }
