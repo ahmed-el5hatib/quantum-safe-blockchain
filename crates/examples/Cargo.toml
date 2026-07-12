@@ -1,0 +1,16 @@
+[package]
+name = "examples"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[[bin]]
+name = "qsb-single-node"
+path = "src/bin/single_node.rs"
+
+[dependencies]
+tokio.workspace = true
+node.workspace = true
+config.workspace = true

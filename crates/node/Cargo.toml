@@ -1,0 +1,29 @@
+[package]
+name = "node"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[lib]
+path = "src/lib.rs"
+
+[dependencies]
+serde.workspace = true
+thiserror.workspace = true
+anyhow.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+blockchain-core.workspace = true
+cryptography.workspace = true
+transaction.workspace = true
+consensus.workspace = true
+networking.workspace = true
+storage.workspace = true
+mempool.workspace = true
+miner.workspace = true
+config.workspace = true
+logging.workspace = true
+telemetry.workspace = true

@@ -1,0 +1,10 @@
+edition = "2021"
+max_width = 100
+use_small_heuristics = "Default"
+hard_tabs = false
+reorder_imports = true
+reorder_modules = true
+newline_style = "Auto"
+remove_nested_parens = true
+condense_wildcard_suffixes = true
+

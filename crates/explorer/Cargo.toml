@@ -1,0 +1,19 @@
+[package]
+name = "explorer"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[lib]
+path = "src/lib.rs"
+
+[dependencies]
+serde.workspace = true
+thiserror.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+axum.workspace = true
+blockchain-core.workspace = true
+storage.workspace = true

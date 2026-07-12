@@ -1,0 +1,50 @@
+# Rust
+target/
+Cargo.lock
+**/*.rs.bk
+*.pdb
+*.so
+*.dylib
+*.dll
+*.exe
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Environment
+.env
+.env.local
+
+# Secrets
+*.key
+*.pem
+*.p12
+*.pfx
+
+# Benchmark
+benches/output/
+
+# Docs
+docs/target/
+site/
+
+# Testing
+coverage/
+.nyc_output/
+*.gcov
+*.profraw
+
+# CI
+.github/cache/

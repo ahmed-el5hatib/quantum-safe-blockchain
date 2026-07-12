@@ -1,0 +1,78 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/blockchain-core",
+    "crates/cryptography",
+    "crates/wallet",
+    "crates/transaction",
+    "crates/consensus",
+    "crates/networking",
+    "crates/node",
+    "crates/storage",
+    "crates/mempool",
+    "crates/miner",
+    "crates/rpc",
+    "crates/cli",
+    "crates/sdk",
+    "crates/benchmarks",
+    "crates/explorer",
+    "crates/config",
+    "crates/telemetry",
+    "crates/logging",
+    "crates/serialization",
+    "crates/testing",
+    "crates/examples",
+    "crates/integration-tests",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.75.0"
+authors = ["QSB Contributors"]
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/quantum-safe-blockchain/quantum-safe-blockchain"
+
+[workspace.dependencies]
+thiserror = { version = "1.0", default-features = false }
+anyhow = { version = "1.0", default-features = false }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = { version = "1.0" }
+tokio = { version = "1.36", features = ["full"] }
+tracing = { version = "0.1" }
+tracing-subscriber = { version = "0.3" }
+zeroize = { version = "1.6" }
+rand = { version = "0.8" }
+blake3 = { version = "1.5" }
+sha2 = { version = "0.10" }
+sha3 = "0.10"
+hex = { version = "0.4" }
+bytes = { version = "1.5" }
+libp2p = { version = "0.53", default-features = false, features = ["noise", "yamux", "tcp", "mdns", "identify", "ping", "gossipsub", "request-response", "autonat", "relay"] }
+rocksdb = { version = "0.21", optional = true }
+sled = { version = "0.34", optional = true }
+ed25519-dalek = { version = "2.1", features = ["serde"] }
+p256 = { version = "0.13", features = ["ecdsa"] }
+jsonrpsee = { version = "0.23" }
+clap = { version = "4.4", features = ["derive"] }
+toml = "0.8"
+uuid = { version = "1.7", features = ["v4", "serde"] }
+prometheus = { version = "0.13" }
+axum = { version = "0.7" }
+base64 = "0.22"
+chrono = { version = "0.4", features = ["serde"] }
+directories = "5.0"
+criterion = { version = "0.5", features = ["html_reports"] }
+reqwest = { version = "0.11", features = ["json", "rustls-tls"] }
+postcard = { version = "1.0", features = ["alloc"] }
+bincode = { version = "1.3" }
+
+[profile.release]
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true
+
+[profile.bench]
+inherits = "release"
+debug = true

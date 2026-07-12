@@ -1,0 +1,20 @@
+[package]
+name = "sdk"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[lib]
+path = "src/lib.rs"
+
+[dependencies]
+serde.workspace = true
+thiserror.workspace = true
+reqwest.workspace = true
+tokio.workspace = true
+blockchain-core.workspace = true
+transaction.workspace = true
+cryptography.workspace = true
+wallet.workspace = true

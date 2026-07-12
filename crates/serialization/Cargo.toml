@@ -1,0 +1,15 @@
+[package]
+name = "serialization"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[lib]
+path = "src/lib.rs"
+
+[dependencies]
+serde.workspace = true
+postcard.workspace = true
+bincode.workspace = true
