@@ -21,3 +21,7 @@ cryptography = { path = "../cryptography" }
 [dev-dependencies]
 criterion.workspace = true
 merkle = { path = "../merkle" }
+
+[[bench]]
+name = "transaction_bench"
+harness = false
