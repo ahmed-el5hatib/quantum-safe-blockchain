@@ -34,6 +34,7 @@ The cryptography layer follows a strict **Provider Architecture** that separates
 quantum-safe-blockchain/
 ├── crates/
 │   ├── blockchain-core/      # Core types, traits, and abstractions
+│   ├── merkle/               # Generic Merkle tree engine (milestone 4.2)
 │   ├── cryptography/         # Signature, hash, KEM traits and implementations
 │   │   ├── core/             # Implementation-independent traits and types
 │   │   └── providers/        # Concrete algorithm implementations
@@ -77,6 +78,77 @@ quantum-safe-blockchain/
 ### Consensus
 - **Future**: Proof of Work, Proof of Stake, PBFT, Raft, HotStuff
 
+## Merkle Tree Engine
+
+Milestone 4.2 introduces `merkle`, a production-quality, deterministic, and **generic** Merkle Tree
+library. It is the single, reusable engine that every future QSB module uses for commitments and
+inclusion proofs.
+
+### Design
+
+- **Generic over the hash provider.** The engine depends only on the abstract
+  [`HashFunction`](crates/cryptography/src/core/traits/mod.rs) trait. SHA-256, SHA-3, BLAKE3, or any
+  future post-quantum hash works without changing a single line of tree logic.
+- **No direct hashing.** The engine never calls SHA-256 (or any algorithm) directly; all hashing
+  goes through the provider.
+- **Deterministic.** The same leaves and the same provider always produce the same root.
+- **Duplicate-last-leaf strategy.** When a level has an odd number of nodes, the last node is
+  duplicated and hashed with itself (Bitcoin-style). This is enabled by default and can be disabled.
+
+### Public API
+
+| Type | Purpose |
+|------|---------|
+| `MerkleNode` | A single tree node (leaf or internal) in the node arena. |
+| `MerkleTree` | The tree itself; build, root, height, leaf count, contains, proof, verify. |
+| `MerkleRoot` | The root commitment; converts to/from `blockchain_core::MerkleRoot`. |
+| `MerkleProof` | An `O(log n)` inclusion proof; serializable to JSON and binary. |
+| `ProofStep` | One sibling hash plus its side (left/right). |
+| `TreeBuilder` | Fluent builder for configuring and constructing trees. |
+| `ProofVerifier` | Stateless verifier that checks proofs against a trusted root. |
+
+### Operations
+
+- `MerkleTree::build` — build from arbitrary data (leaves are hashed).
+- `MerkleTree::build_from_hashes` — build directly from pre-computed hashes (e.g. transaction hashes).
+- `root` / `height` / `depth` / `leaf_count` / `contains` — tree queries.
+- `proof(index)` — generate a proof for any leaf.
+- `verify` / `ProofVerifier` — verify a proof statelessly against a trusted root.
+
+### Serialization
+
+`MerkleTree`, `MerkleProof`, `MerkleRoot`, and `ProofStep` all support **Serde**, **JSON**, and
+**binary** (`bincode`). The hash provider is not serialized; it is supplied again when reconstructing
+a tree via `MerkleTree::from_json` / `MerkleTree::from_binary`.
+
+### Integration with the Blockchain Data Model
+
+- `merkle::MerkleRoot` converts losslessly to/from `blockchain_core::MerkleRoot`, which is stored in a
+  block header.
+- `MerkleTree` implements `blockchain_core::traits::MerkleTreeT`, so it can drop directly into the
+  existing blockchain abstractions.
+- Errors are unified with the blockchain error model via `blockchain_core::CoreError` (new variants:
+  `EmptyTree`, `InvalidProof`, `InvalidLeaf`, `InvalidTree`).
+
+### Example
+
+```rust
+use cryptography::providers::Sha256Provider;
+use merkle::{MerkleTree, ProofVerifier};
+
+let hasher = Sha256Provider;
+let tree = MerkleTree::build(
+    vec![b"tx-1".as_ref(), b"tx-2".as_ref(), b"tx-3".as_ref()],
+    hasher.clone(),
+).unwrap();
+let root = tree.root();
+
+let proof = tree.proof(1).unwrap();
+let verifier = ProofVerifier::new(hasher);
+assert!(verifier.verify(&proof));
+assert_eq!(proof.root_hash, root.as_bytes());
+```
+
 ## Quick Start
 
 ```bash
@@ -93,6 +165,8 @@ cargo test --workspace
 - **Repository Foundation**: CI/CD pipeline, Dependabot, cargo-deny, rustfmt, clippy
 - **Architecture**: Modular hexagonal architecture, strict dependency layers, provider-based design
 - **Cryptography Framework**: Production-ready crypto-agile layer with SHA-256 and Ed25519 providers
+- **Merkle Tree Engine (4.2)**: Generic, deterministic, reusable Merkle tree with proof generation,
+  verification, JSON/binary serialization, and blockchain-core integration
 
 ### In Progress / Future Milestones
 
