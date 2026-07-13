@@ -1,8 +1,12 @@
 # Quantum Safe Blockchain (QSB)
 
-![Rust](https://img.shields.io/badge/rust-stable-red)
-![License](https://img.shields.io/badge/License-MIT%2FApache%202.0-blue)
-![Status](https://img.shields.io/badge/status-active-brightgreen)
+[![Rust](https://img.shields.io/badge/rust-stable-red)](https://www.rust-lang.org)
+[![License](https://img.shields.io/badge/License-MIT%2FApache%202.0-blue)](LICENSE-MIT)
+[![Status](https://img.shields.io/badge/status-active-brightgreen)](https://github.com/ahmed-el5hatib/quantum-safe-blockchain)
+[![Build Status](https://img.shields.io/badge/build-passing-green)](https://github.com/ahmed-el5hatib/quantum-safe-blockchain/actions)
+[![Documentation](https://img.shields.io/badge/docs-latest-blue)](https://docs.rs/cryptography/latest/cryptography/)
+
+**QSB v0.3.0 — Cryptography Foundation**
 
 A production-grade modular blockchain framework designed for research and experimentation with post-quantum cryptography, distributed systems, and consensus algorithms.
 
@@ -60,18 +64,18 @@ quantum-safe-blockchain/
 ## Supported Algorithms
 
 ### Signatures
-- **Classical**: Ed25519, ECDSA (P-256)
-- **Post-Quantum (Future)**: ML-DSA (Dilithium), Falcon, SPHINCS+
+- **Implemented**: Ed25519
+- **Future**: ECDSA (P-256), ML-DSA (Dilithium), Falcon, SPHINCS+
 
 ### KEM
-- **Classical**: X25519
-- **Post-Quantum (Future)**: ML-KEM (Kyber), Hybrid KEM
+- **Future**: X25519, ML-KEM (Kyber), Hybrid KEM
 
 ### Hash Functions
-- SHA-256, SHA-3, BLAKE3
+- **Implemented**: SHA-256
+- **Future**: SHA-3, BLAKE3
 
-### Consensus (Future)
-- Proof of Work, Proof of Stake, PBFT, Raft, HotStuff
+### Consensus
+- **Future**: Proof of Work, Proof of Stake, PBFT, Raft, HotStuff
 
 ## Quick Start
 
@@ -81,6 +85,22 @@ cd quantum-safe-blockchain
 cargo build --workspace
 cargo test --workspace
 ```
+
+## Project Status
+
+### Completed
+
+- **Repository Foundation**: CI/CD pipeline, Dependabot, cargo-deny, rustfmt, clippy
+- **Architecture**: Modular hexagonal architecture, strict dependency layers, provider-based design
+- **Cryptography Framework**: Production-ready crypto-agile layer with SHA-256 and Ed25519 providers
+
+### In Progress / Future Milestones
+
+- Blockchain Core (blocks, transactions, chain state)
+- Networking (libp2p, peer discovery, sync)
+- Consensus (PoW, PoS, PBFT)
+- Wallet & SDK
+- Explorer & GUI
 
 ## Contributing
 

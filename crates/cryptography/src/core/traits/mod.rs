@@ -122,7 +122,7 @@ pub trait PublicKey: Send + Sync + std::fmt::Debug {
 /// # Security
 ///
 /// Private keys are highly sensitive. Implementations MUST ensure key material is
-/// zeroized when no longer needed. Implementations should derive [`ZeroizeOnDrop`]
+/// zeroized when no longer needed. Implementations should derive `ZeroizeOnDrop`
 /// or manually implement `Drop` to clear memory.
 pub trait PrivateKey: Send + Sync + std::fmt::Debug {
     /// Returns the private key bytes.

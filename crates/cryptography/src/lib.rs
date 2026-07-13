@@ -63,7 +63,7 @@
 //! ## Security Considerations
 //!
 //! - All randomness comes from OS-level entropy (`rand_core::OsRng`).
-//! - Private keys implement [`ZeroizeOnDrop`] to clear memory on drop.
+//! - Private keys implement `ZeroizeOnDrop` to clear memory on drop.
 //! - No panics in library code; all operations return [`CryptoResult`].
 //! - No secrets are logged.
 //! - Ed25519 verification uses `verify_strict` to prevent malleability attacks.
