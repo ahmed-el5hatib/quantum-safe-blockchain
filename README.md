@@ -39,7 +39,7 @@ quantum-safe-blockchain/
 │   │   ├── core/             # Implementation-independent traits and types
 │   │   └── providers/        # Concrete algorithm implementations
 │   ├── wallet/               # Key generation, signing, verification
-│   ├── transaction/          # Transaction types and validation
+│   ├── transaction/          # Immutable, crypto-agnostic transaction domain model (milestone 4.3)
 │   ├── consensus/            # Consensus algorithms (PoW, PoS, PBFT, etc.)
 │   ├── networking/           # libp2p networking layer
 │   ├── node/                 # Node orchestration
@@ -149,6 +149,83 @@ assert!(verifier.verify(&proof));
 assert_eq!(proof.root_hash, root.as_bytes());
 ```
 
+## Transaction Domain Model (Milestone 4.3)
+
+Milestone 4.3 introduces `transaction`, an immutable, extensible, and **agnostic** transaction
+domain model. It implements only the *domain objects* — no validation, state, networking, or
+signing — that future components (validation engine, mempool, consensus, storage, wallet) consume.
+
+### Design
+
+- **Immutable after construction.** A `Transaction` is produced only by `TransactionBuilder` and
+  cannot be mutated afterward.
+- **Builder Pattern.** `TransactionBuilder` validates structure (duplicate inputs/outputs, zero
+  amounts, missing inputs/outputs, invalid versions) *before* finalizing.
+- **Crypto-agnostic hashing.** The hash is computed only through the abstract
+  [`HashFunction`](crates/cryptography/src/core/traits/mod.rs) trait. SHA-256, SHA-3, BLAKE3, or any
+  future provider work without changing the model.
+- **Signature abstraction.** The transaction never names Ed25519. Signatures and keys are carried as
+  opaque, algorithm-labelled bytes (`SignatureContainer`, `PublicKeyReference`), so ML-DSA / Falcon /
+  SPHINCS+ integrate by swapping the crypto provider.
+- **Signed-after-hash.** The hash covers version, timestamp, type, inputs, outputs, and metadata —
+  **excluding** signatures and keys — so the hash is stable regardless of which signatures are attached.
+
+### Core Types
+
+| Type | Purpose |
+|------|---------|
+| `Transaction` | The immutable, fully-constructed transaction. |
+| `TransactionId` | Unique id (equal to the transaction hash). |
+| `TransactionHash` | Canonical hash of hash-relevant fields (excludes signatures). |
+| `TransactionVersion` | Protocol version (forward compatible). |
+| `TransactionType` | `Transfer`, `Coinbase`, or `Custom(u32)` for future families. |
+| `TransactionInput` | Reference to a prior output + unlocking/script/witness placeholders. |
+| `TransactionOutput` | Recipient, amount, output type, locking/contract placeholders. |
+| `TransactionMetadata` | Fee, lock time, memo, and a `BTreeMap` of forward-compatible extensions. |
+| `SignatureContainer` | Opaque, keyed collection of (public key, signature) entries. |
+| `PublicKeyReference` | Opaque public key bytes + algorithm name. |
+| `TransactionBuilder` | Validating builder that produces an immutable `Transaction`. |
+| `TransactionT` | Read-only trait view used by higher-level components. |
+
+### Serialization
+
+Every domain type derives **Serde** and supports **JSON** (`Transaction::to_json` /
+`Transaction::from_json`) and **binary** (`bincode`, via `Transaction::to_binary` /
+`Transaction::from_binary`).
+
+### Integration
+
+- **Blockchain Core**: `Transaction` reuses the unified `CoreError` / `CoreResult` types and is the
+  unit committed into block structures.
+- **Merkle Tree**: transaction hashes (`TransactionHash`) are the leaves committed into the block
+  Merkle root; the hash is stable so commitments never shift once signatures are added.
+- **Cryptography Layer**: hashing goes only through the `HashFunction` trait, and signatures/keys are
+  carried as opaque, algorithm-labelled bytes via the `SignatureAlgorithm` abstraction.
+- **Future Validation Engine**: reads the `TransactionT` trait view, recomputes/verifies the hash via
+  `Transaction::verify_hash`, and verifies `SignatureContainer` entries against the active
+  `SignatureAlgorithm` provider — none of which require changes to this crate.
+
+### Example
+
+```rust
+use cryptography::providers::Sha256Provider;
+use transaction::{TransactionBuilder, TransactionInput, TransactionOutput, OutputType};
+
+let tx = TransactionBuilder::new(Sha256Provider)
+    .with_timestamp(1_700_000_000)
+    .add_input(TransactionInput::new(
+        transaction::TransactionId::from_hex(&"11".repeat(32)).unwrap(),
+        0,
+    ))
+    .unwrap()
+    .add_output(TransactionOutput::new(vec![0xAA; 32], 100, OutputType::Standard).unwrap())
+    .unwrap()
+    .finalize()
+    .unwrap();
+
+assert!(tx.verify_hash(&Sha256Provider));
+```
+
 ## Quick Start
 
 ```bash
@@ -167,6 +244,9 @@ cargo test --workspace
 - **Cryptography Framework**: Production-ready crypto-agile layer with SHA-256 and Ed25519 providers
 - **Merkle Tree Engine (4.2)**: Generic, deterministic, reusable Merkle tree with proof generation,
   verification, JSON/binary serialization, and blockchain-core integration
+- **Transaction Domain Model (4.3)**: Immutable, crypto-agnostic transaction domain objects
+  (`Transaction`, `TransactionBuilder`, inputs/outputs, signatures, metadata) with builder-based
+  validation, canonical hashing, and JSON/binary serialization
 
 ### In Progress / Future Milestones
 
