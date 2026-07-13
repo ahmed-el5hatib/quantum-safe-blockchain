@@ -43,6 +43,18 @@ pub enum CoreError {
 
     #[error("genesis config error: {0}")]
     GenesisConfig(String),
+
+    #[error("empty merkle tree: {0}")]
+    EmptyTree(String),
+
+    #[error("invalid merkle proof: {0}")]
+    InvalidProof(String),
+
+    #[error("invalid merkle leaf: {0}")]
+    InvalidLeaf(String),
+
+    #[error("invalid merkle tree: {0}")]
+    InvalidTree(String),
 }
 
 pub type CoreResult<T> = Result<T, CoreError>;
