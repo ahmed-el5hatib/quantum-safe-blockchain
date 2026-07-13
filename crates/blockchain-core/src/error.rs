@@ -44,6 +44,24 @@ pub enum CoreError {
     #[error("genesis config error: {0}")]
     GenesisConfig(String),
 
+    #[error("missing transaction inputs: {0}")]
+    MissingInputs(String),
+
+    #[error("missing transaction outputs: {0}")]
+    MissingOutputs(String),
+
+    #[error("invalid transaction amount: {0}")]
+    InvalidAmount(String),
+
+    #[error("duplicate transaction input: {0}")]
+    DuplicateInput(String),
+
+    #[error("duplicate transaction output: {0}")]
+    DuplicateOutput(String),
+
+    #[error("transaction serialization error: {0}")]
+    TransactionSerialization(String),
+
     #[error("empty merkle tree: {0}")]
     EmptyTree(String),
 

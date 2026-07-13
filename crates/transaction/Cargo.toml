@@ -5,15 +5,15 @@ edition.workspace = true
 authors.workspace = true
 license.workspace = true
 repository.workspace = true
+description = "Immutable, extensible transaction domain model for the QSB ecosystem"
 
 [lib]
 path = "src/lib.rs"
 
 [dependencies]
 serde.workspace = true
-thiserror.workspace = true
-zeroize.workspace = true
+serde_json.workspace = true
 hex.workspace = true
-blake3.workspace = true
+bincode.workspace = true
 blockchain-core = { path = "../blockchain-core" }
 cryptography = { path = "../cryptography" }
