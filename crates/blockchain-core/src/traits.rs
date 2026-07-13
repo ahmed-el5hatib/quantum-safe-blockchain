@@ -1,14 +1,16 @@
 use std::fmt;
 
 use crate::types::{
-    BlockHeader, ChainState, HashDigest, MerkleRoot, Transaction, TransactionInput,
-    TransactionOutput,
+    BlockHash, BlockHeader, BlockMetadata, ChainState, HashDigest, MerkleRoot, Transaction,
+    TransactionInput, TransactionOutput,
 };
 use crate::CoreResult;
 
 pub trait BlockT: Send + Sync + fmt::Debug {
     fn header(&self) -> &BlockHeader;
     fn transactions(&self) -> &[Transaction];
+    fn metadata(&self) -> &BlockMetadata;
+    fn block_hash(&self) -> &BlockHash;
     fn hash(&self) -> HashDigest;
     fn validate(&self) -> CoreResult<()>;
     fn serialize(&self) -> CoreResult<Vec<u8>>;

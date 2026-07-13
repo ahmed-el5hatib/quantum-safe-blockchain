@@ -19,6 +19,30 @@ pub enum CoreError {
 
     #[error("unknown error: {0}")]
     Unknown(String),
+
+    #[error("invalid version: {0}")]
+    InvalidVersion(String),
+
+    #[error("invalid height: {0}")]
+    InvalidHeight(String),
+
+    #[error("invalid timestamp: {0}")]
+    InvalidTimestamp(String),
+
+    #[error("invalid difficulty: {0}")]
+    InvalidDifficulty(String),
+
+    #[error("invalid nonce: {0}")]
+    InvalidNonce(String),
+
+    #[error("invalid previous hash: {0}")]
+    InvalidPreviousHash(String),
+
+    #[error("invalid merkle root: {0}")]
+    InvalidMerkleRoot(String),
+
+    #[error("genesis config error: {0}")]
+    GenesisConfig(String),
 }
 
 pub type CoreResult<T> = Result<T, CoreError>;

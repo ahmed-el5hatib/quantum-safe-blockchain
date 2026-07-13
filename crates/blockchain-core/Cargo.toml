@@ -18,3 +18,8 @@ blake3.workspace = true
 hex.workspace = true
 uuid.workspace = true
 chrono.workspace = true
+cryptography.workspace = true
+bincode.workspace = true
+
+[dev-dependencies]
+criterion.workspace = true
