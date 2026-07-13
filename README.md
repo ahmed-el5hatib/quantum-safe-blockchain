@@ -15,13 +15,24 @@ A production-grade modular blockchain framework designed for research and experi
 - **Performance Engineering**: Comprehensive benchmarking suite measuring TPS, latency, CPU, memory, and disk usage.
 - **Security First**: Constant-time cryptography, zero hardcoded secrets, validated inputs, and timing-leak prevention.
 
+## Cryptography Layer
+
+The cryptography layer follows a strict **Provider Architecture** that separates interfaces from implementations.
+
+- **Core Traits**: `HashFunction`, `SignatureAlgorithm`, `PublicKey`, `PrivateKey`, `Signature`, `RandomGenerator`, `Encoder`, `Decoder`
+- **Providers**: SHA-256 (hash), Ed25519 (signatures)
+- **Crypto Agility**: The blockchain never knows that Ed25519 or SHA-256 exist. Future post-quantum algorithms (ML-DSA, ML-KEM, Falcon, SPHINCS+) require only new provider implementations.
+- **Security**: OS-level randomness, zeroized private keys, no panics in library code, constant-time verification.
+
 ## Project Structure
 
-```
+```text
 quantum-safe-blockchain/
 ├── crates/
 │   ├── blockchain-core/      # Core types, traits, and abstractions
 │   ├── cryptography/         # Signature, hash, KEM traits and implementations
+│   │   ├── core/             # Implementation-independent traits and types
+│   │   └── providers/        # Concrete algorithm implementations
 │   ├── wallet/               # Key generation, signing, verification
 │   ├── transaction/          # Transaction types and validation
 │   ├── consensus/            # Consensus algorithms (PoW, PoS, PBFT, etc.)
