@@ -70,6 +70,7 @@
 //! - **Multi-sig / time-lock / identity / quantum migration**: `Custom` type codes and `extensions`
 //!   keys, with signatures carried opaquely for whichever algorithm is active.
 
+pub mod builder;
 pub mod error;
 pub mod traits;
 pub mod types;
@@ -78,6 +79,7 @@ pub mod validator;
 pub use error::{TransactionError, TransactionResult};
 pub use traits::TransactionT;
 
+pub use builder::TransactionBuilder;
 pub use types::{
     OutputType, PublicKeyReference, SignatureContainer, SignatureEntry, Transaction,
     TransactionHash, TransactionId, TransactionInput, TransactionMetadata, TransactionOutput,
