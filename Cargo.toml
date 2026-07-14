@@ -22,6 +22,7 @@ members = [
     "crates/serialization",
     "crates/testing",
     "crates/merkle",
+    "crates/validation",
     "crates/examples",
     "crates/integration-tests",
 ]

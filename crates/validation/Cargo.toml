@@ -1,0 +1,29 @@
+[package]
+name = "validation"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Reusable, deterministic validation engine for the QSB blockchain ecosystem (milestone 4.4)"
+
+[lib]
+path = "src/lib.rs"
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true
+bincode.workspace = true
+hex.workspace = true
+thiserror.workspace = true
+blockchain-core = { path = "../blockchain-core" }
+cryptography = { path = "../cryptography" }
+merkle = { path = "../merkle" }
+
+[dev-dependencies]
+criterion.workspace = true
+rand.workspace = true
+
+[[bench]]
+name = "validation_bench"
+harness = false

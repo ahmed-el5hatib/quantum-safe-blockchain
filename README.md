@@ -40,7 +40,8 @@ quantum-safe-blockchain/
 │   │   └── providers/        # Concrete algorithm implementations
 │   ├── wallet/               # Key generation, signing, verification
 │   ├── transaction/          # Immutable, crypto-agnostic transaction domain model (milestone 4.3)
-│   ├── consensus/            # Consensus algorithms (PoW, PoS, PBFT, etc.)
+│   ├── validation/            # Reusable, deterministic validation engine (milestone 4.4)
+│   ├── consensus/             # Consensus algorithms (PoW, PoS, PBFT, etc.)
 │   ├── networking/           # libp2p networking layer
 │   ├── node/                 # Node orchestration
 │   ├── storage/              # Storage backend abstractions
@@ -226,6 +227,67 @@ let tx = TransactionBuilder::new(Sha256Provider)
 assert!(tx.verify_hash(&Sha256Provider));
 ```
 
+## Validation Engine (Milestone 4.4)
+
+Milestone 4.4 introduces `validation`, a reusable, deterministic, and **trait-based** validation
+engine. It validates **blocks** and **transactions** independently of networking, storage,
+consensus, and execution, so every future QSB blockchain implementation reuses it unchanged.
+
+### Design
+
+- **Rule → Pipeline → Engine.** Validation is composed from atomic [`ValidationRule`](crates/validation/src/rule.rs)
+  checks collected into a [`ValidationPipeline`](crates/validation/src/pipeline.rs), orchestrated by
+  the [`ValidationEngine`](crates/validation/src/engine.rs).
+- **Stateless & panic-free.** Rules read only their target and the
+  [`ValidationContext`](crates/validation/src/context.rs), and every validator returns
+  `Result<T, ValidationError>`.
+- **Crypto-agile.** The engine depends only on the abstract
+  [`HashFunction`](crates/cryptography/src/core/traits/mod.rs) trait. The concrete algorithm (SHA-256,
+  SHA-3, BLAKE3, or a future post-quantum hash) is injected through the context — the engine never
+  names a specific algorithm.
+- **Configurable rules.** Each rule can be enabled/disabled through
+  [`ValidationConfig`](crates/validation/src/context.rs), so operators tune policy without code changes.
+- **Rich reports.** Validation yields a [`ValidationReport`](crates/validation/src/report.rs) with
+  success/failure, every executed rule (and its timing), error details, and optional warnings.
+
+### Block Rules
+
+`header_format`, `hash_consistency`, `merkle_root`, `timestamp`, `height`, `previous_hash`,
+`genesis_constraints`, `metadata`.
+
+### Transaction Rules
+
+`structure`, `version`, `inputs_exist`, `outputs_exist`, `duplicate_inputs`, `duplicate_outputs`,
+`amount`, `hash_integrity`, `signature_placeholder`. Transaction validation is structural/semantic
+only (no UTXO set, no signature verification — those belong to later milestones).
+
+### Integration with the Future Blockchain Engine
+
+The Blockchain Engine (milestone 4.5+) will:
+
+1. Build blocks whose hashes and Merkle roots follow the engine's canonical commitments
+   (`compute_block_hash`, `compute_merkle_root`), reusing the same `HashFunction` provider.
+2. Call `engine.check_block(block, ctx)` / `engine.check_transaction(tx, ctx)` during block
+   reception, mining, and mempool admission.
+3. Inject chain facts (clock, previous hash/height, genesis flag) through `ValidationContext`,
+   leaving the engine itself stateless and reusable.
+
+### Example
+
+```rust
+use std::sync::Arc;
+use cryptography::providers::Sha256Provider;
+use validation::{ValidationContext, ValidationEngine};
+
+let engine = ValidationEngine::with_defaults();
+let ctx = ValidationContext::new(Arc::new(Sha256Provider));
+// let report = engine.validate_block(&block, &ctx);
+// engine.check_block(&block, &ctx)?; // Result<(), ValidationError>
+```
+
+See [`docs/architecture/validation-engine.md`](docs/architecture/validation-engine.md) for the full
+architecture, rule pipeline, validation lifecycle, extensibility, and performance analysis.
+
 ## Quick Start
 
 ```bash
@@ -247,6 +309,10 @@ cargo test --workspace
 - **Transaction Domain Model (4.3)**: Immutable, crypto-agnostic transaction domain objects
   (`Transaction`, `TransactionBuilder`, inputs/outputs, signatures, metadata) with builder-based
   validation, canonical hashing, and JSON/binary serialization
+- **Validation Engine (4.4)**: Reusable, deterministic, trait-based validation framework
+  (`ValidationEngine`, `ValidationPipeline`, `ValidationRule`, `ValidationContext`,
+  `ValidationReport`) with modular block/transaction rules, configurable enable/disable, rich
+  reporting, comprehensive tests, and benchmarks
 
 ### In Progress / Future Milestones
 
